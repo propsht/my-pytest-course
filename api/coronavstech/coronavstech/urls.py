@@ -16,8 +16,16 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+# from rest_framework import routers
+
+
+from api.coronavstech.companies.urls import companies_router
+
+# router = routers.DefaultRouter()
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include(companies_router.urls)),
 ]
