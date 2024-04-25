@@ -5,8 +5,10 @@ name = "pypi"
 
 [packages]
 pytest = "*"
-djangorestframework = "*"
+pytest-django = "*"
+pytest-env = "*"
 black = "*"
+djangorestframework = "*"
 
 [dev-packages]
 
