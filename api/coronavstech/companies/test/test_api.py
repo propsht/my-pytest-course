@@ -95,7 +95,6 @@ class TestPostCompanies(BasicCompanyAPITestcase):
         self.assertIn("WrongStatus", str(response.content))
         self.assertIn("is not a valid choice.", str(response.content))
 
-
     @pytest.mark.xfail
     def test_should_be_ok_if_fails(self) -> None:
         self.assertEqual(1, 2)
@@ -103,3 +102,11 @@ class TestPostCompanies(BasicCompanyAPITestcase):
     @pytest.mark.skip
     def test_should_be_skipped(self) -> None:
         self.assertEqual(1, 2)
+
+def raise_covid19_exception() -> None:
+    raise ValueError("CoronaVirus Exception")
+    # pass
+def test_raise_covid19_exception_should_pass() -> None:
+    with pytest.raises(ValueError) as e:
+        raise_covid19_exception()
+    assert "CoronaVirus Exception" == str(e.value)
