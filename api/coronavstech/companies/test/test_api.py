@@ -2,7 +2,6 @@ import json
 import pytest
 from django.urls import reverse
 
-
 from api.coronavstech.companies.models import Company
 
 companies_url = reverse("companies-list")
