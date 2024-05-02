@@ -17,7 +17,7 @@ class CompanyViewSet(ModelViewSet):
 
 
 @api_view(http_method_names=["POST"])
-def send_company_email(request:Request) -> Response:
+def send_company_email(request: Request) -> Response:
     """
     send email with request payload
     sender: propsht.ufo@gmail.com
@@ -30,7 +30,5 @@ def send_company_email(request:Request) -> Response:
         recipient_list=["propsht.ufo@gmail.com"],
     )
     return Response(
-        {
-            "status": "success",
-            "info": "email send successfully"}, status=200
+        {"status": "success", "info": "email send successfully"}, status=200
     )
