@@ -3,14 +3,21 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[dev-packages]
+
 [packages]
+black = "*"
 pytest = "*"
 pytest-django = "*"
-pytest-env = "*"
-black = "*"
 djangorestframework = "*"
 
-[dev-packages]
+pytest-cov = "*"
+
+pytest-env = "*"
+
+
+
 
 [requires]
 python_version = "3.12"
+
