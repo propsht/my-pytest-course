@@ -2,12 +2,12 @@ from typing import Callable
 
 import pytest
 
-from fibonacci.cached import fibonacci_cached
+from fibonacci.cached import fibonacci_cached, fibonacci_lru_cached
+from fibonacci.dynamic import fibonacci_dynamic, fibonacci_dynamic_v2
 from fibonacci.naive import fibonacci_naive
+from conftest import time_tracking
 
 
-# add parametrize decorator
-@pytest.mark.parametrize("fibonacci_func", [fibonacci_naive, fibonacci_cached])
 @pytest.mark.parametrize(
     "n,expected",
     [
@@ -17,7 +17,20 @@ from fibonacci.naive import fibonacci_naive
         (20, 6765),
     ],
 )
-def test_fibonacci(fibonacci_func: Callable[[int], int], n: int, expected: int) -> None:
+# add parametrize decorator
+@pytest.mark.parametrize(
+    "fibonacci_func",
+    [
+        fibonacci_naive,
+        fibonacci_cached,
+        fibonacci_lru_cached,
+        fibonacci_dynamic,
+        fibonacci_dynamic_v2,
+    ],
+)
+def test_fibonacci(
+    time_tracking, fibonacci_func: Callable[[int], int], n: int, expected: int
+) -> None:
     res = fibonacci_func(n)
     assert res == expected
 
