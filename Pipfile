@@ -10,14 +10,9 @@ black = "*"
 pytest = "*"
 pytest-django = "*"
 djangorestframework = "*"
-
 pytest-cov = "*"
-
 pytest-env = "*"
-
-
-
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.12"
-

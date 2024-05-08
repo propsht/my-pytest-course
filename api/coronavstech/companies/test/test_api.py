@@ -1,4 +1,6 @@
 import json
+from typing import List
+
 import pytest
 from django.urls import reverse
 
@@ -17,12 +19,17 @@ def test_zero_companies_should_return_empty_list(client) -> None:
     assert json.loads(response.content) == []
 
 
-def test_one_company_exist_should_succeed(client) -> None:
-    test_company = Company.objects.create(name="Amazon")
+@pytest.fixture
+def amazon() -> Company:
+    return Company.objects.create(name="Amazon")
+
+
+def test_one_company_exist_should_succeed(client, amazon) -> None:
+
     response = client.get(companies_url)
     response_content = json.loads(response.content)[0]
     assert response.status_code == 200
-    assert response_content.get("name") == test_company.name
+    assert response_content.get("name") == amazon.name
     assert response_content.get("status") == "Hiring"
     assert response_content.get("application_link") == ""
     assert response_content.get("notes") == ""
@@ -96,3 +103,55 @@ def test_should_be_ok_if_fails() -> None:
 @pytest.mark.skip
 def test_should_be_skipped() -> None:
     assert 1 == 2
+
+
+# -------------------- Learn about fixtures tests --------------------
+
+
+@pytest.fixture
+def companies(request, company) -> List[Company]:
+    companies = []
+    names = request.param
+    for name in names:
+        companies.append(company(name=name))
+
+    return companies
+
+
+@pytest.fixture()
+def company(**kwargs):
+    def _company_factory(**kwargs) -> Company:
+        company_name = kwargs.pop("name", "Test Company LLC")
+        return Company.objects.create(name=company_name, **kwargs)
+
+    return _company_factory
+
+
+@pytest.mark.parametrize(
+    "companies", [["Twitch", "TikTok", "Test Company LLC"], ["Facebook", "Instagram"]],
+    ids=["3 T companies", "Zuckerberg's companies"],
+    indirect=True
+)
+def test_multiple_companies_exist_should_succeed(client, companies) -> None:
+
+    company_names = set(map(lambda x: x.name, companies))
+    print(company_names)
+    response_companies = client.get(companies_url).json()
+    assert len(company_names) == len(response_companies)
+    response_company_names = set(
+        map(lambda company: company.get("name"), response_companies)
+    )
+    assert company_names == response_company_names
+
+
+# def test_multiple_companies_exist_should_succeed(client) -> None:
+#     twitch = Company.objects.create(name="Twitch")
+#     tiktok = Company.objects.create(name="TikTok")
+#     test_company = Company.objects.create(name="Test Company LLC")
+#     company_names = {twitch.name, tiktok.name, test_company.name}
+#     response_companies = client.get(companies_url).json()
+#     assert len(company_names) == len(response_companies)
+#     response_company_names = set(
+#         map(lambda company: company.get("name"), response_companies)
+#     )
+#     assert company_names == response_company_names
