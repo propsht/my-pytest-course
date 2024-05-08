@@ -19,11 +19,6 @@ def test_zero_companies_should_return_empty_list(client) -> None:
     assert json.loads(response.content) == []
 
 
-@pytest.fixture
-def amazon() -> Company:
-    return Company.objects.create(name="Amazon")
-
-
 def test_one_company_exist_should_succeed(client, amazon) -> None:
 
     response = client.get(companies_url)
@@ -108,29 +103,11 @@ def test_should_be_skipped() -> None:
 # -------------------- Learn about fixtures tests --------------------
 
 
-@pytest.fixture
-def companies(request, company) -> List[Company]:
-    companies = []
-    names = request.param
-    for name in names:
-        companies.append(company(name=name))
-
-    return companies
-
-
-@pytest.fixture()
-def company(**kwargs):
-    def _company_factory(**kwargs) -> Company:
-        company_name = kwargs.pop("name", "Test Company LLC")
-        return Company.objects.create(name=company_name, **kwargs)
-
-    return _company_factory
-
-
 @pytest.mark.parametrize(
-    "companies", [["Twitch", "TikTok", "Test Company LLC"], ["Facebook", "Instagram"]],
+    "companies",
+    [["Twitch", "TikTok", "Test Company LLC"], ["Facebook", "Instagram"]],
     ids=["3 T companies", "Zuckerberg's companies"],
-    indirect=True
+    indirect=True,
 )
 def test_multiple_companies_exist_should_succeed(client, companies) -> None:
 
