@@ -13,6 +13,8 @@ djangorestframework = "*"
 pytest-cov = "*"
 pytest-env = "*"
 pytest-xdist = "*"
+requests = "*"
+responses = "*"
 
 [requires]
 python_version = "3.12"
