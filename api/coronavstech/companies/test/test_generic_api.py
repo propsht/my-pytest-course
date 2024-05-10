@@ -61,7 +61,7 @@ def test_mocked_apple7_api() -> None:
         url="https://api.restful-api.dev/objects/7",
         json={
             "id": "7",
-            "name": "Apple MacBook Pro 21",
+            "name": "Apple MacBook Pro 20",
             "data": {
                 "year": 2040,
                 "price": 1849.99,
